@@ -13,7 +13,7 @@
 #'@param Nlandmark How many landmarks are there for each object? (usually nrow(myData[,,1]))
 #'@param tune Tuning value of MCMC sampler
 #'@param Nsample Number of MCMC sample desired
-#' @keywords MCMCpostsample2D
+#' @keywords TMCMCpostsample2D
 #' @return matrix containing samples from posterior density of parameter
 #' @export
 #' @examples
@@ -21,11 +21,11 @@
 #'require(shapes)
 #'data(apes)
 #'myData = apes$x
-#'ape_ress_10000=MCMCpostsample2D(apes$x,10,nrow(myData[,,1]), tune=rep(1,5),10000)
+#'ape_ress_10000=MCMCpostsample2D(apes$x,10,nrow(myData[,,1]), tune=1,10)
 #'}
 #'
 
-MCMCpostsample2D=function(myData, choice, Nlandmark, tune,Nsample)
+TMCMCpostsample2D=function(myData, choice, Nlandmark, tune,Nsample)
 {
   p=Nlandmark;
   M = myData[,,1]
@@ -79,13 +79,67 @@ MCMCpostsample2D=function(myData, choice, Nlandmark, tune,Nsample)
 
 
 
+  purturb11 <- function(t) {
+    e = abs(rnorm(1,0,1))
+
+    c=c(t[1],t[2]);
+    b=t[3];
+    th=t[4];
+    sig=t[5];
+    #rnorm(1, x, 0.1)
+    u1 = runif(1,0,1)
+    if( u1<0.5 )
+    { new_c_1 = c[1]+0.5*tune*e
+    }
+    else
+    { new_c_1 = c[1]-0.5*tune*e
+    }
+
+    u2 = runif(1,0,1)
+    if( u2<0.5 )
+    { new_c_2 = c[2]+0.5*tune*e
+    }
+    else
+    { new_c_2 = c[2]-0.5*tune*e
+    }
+
+    new_c=c(new_c_1, new_c_2)
+
+    ub = runif(1,0,1)
+    if( ub<0.5 )
+    { new_b = b+0.5*tune*e
+    }
+    else
+    { new_b = b-0.5*tune*e
+    }
 
 
-  step = function(t,tune)
+    ut = runif(1,0,1)
+    if( ut<0.5 )
+    { new_th = th+0.5*tune*e
+    }
+    else
+    { new_th = th-0.5*tune*e
+    }
+
+    us = runif(1,0,1)
+    if( us<0.5 )
+    { new_sig = sig+0.5*tune*e
+    }
+    else
+    {  new_sig = min(0.01,sig-0.5*e)
+    }
+
+    g=c(new_c[1], new_c[2],new_b, new_th,new_sig)
+    return(g)
+
+  }
+
+  step = function(t, purturb11)
   {
 
     ## Pick new point
-    t_p = purturb2D(t, tune)
+    t_p = purturb(t)
 
     ## Acceptance probability:
     alpha <- min(1, fratio(t_p,t))
@@ -100,10 +154,10 @@ MCMCpostsample2D=function(myData, choice, Nlandmark, tune,Nsample)
 
   #q2 <- function(x) rnorm(1, x, 0.08)
 
-  run <- function(t, tune, nsteps) {
+  run <- function(t, purturb11, nsteps) {
     res <- matrix(NA, nsteps, length(t))
     for (i in seq_len(nsteps)){
-      res[i,] <- t <- step(t,tune)
+      res[i,] <- t <- step(t, purturb)
 
       print(i)
       if (i == nsteps) cat(': Done')
@@ -114,7 +168,7 @@ MCMCpostsample2D=function(myData, choice, Nlandmark, tune,Nsample)
 
 
   #run
-  ress <- run(rnorm(5, mean=1, sd=1),tune, Nsample)
+  ress <- run(rnorm(5, mean=1, sd=1),  purturb11, Nsample)
 
 
   naming=function()
