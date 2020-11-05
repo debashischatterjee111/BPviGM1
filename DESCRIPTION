@@ -17,10 +17,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1.9000
 Imports:
 		MASS,
-	coda,
-	rjags, 
-	rgl,shapes,
-	Morpho, 
+		shapes,
+  	Morpho, 
 	geomorph, 
 	mvtnorm
 Depends: 
