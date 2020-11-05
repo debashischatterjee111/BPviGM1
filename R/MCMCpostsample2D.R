@@ -8,11 +8,13 @@
 #' "theta" =Rotation angle
 #' "Sigma" = Isotropic error variation parameter
 #' Note that, here we are assuming Isotropy of error variance
+#'
+#'@param tune Tuning value of MCMC sampler
 #'@param myData  3D array containing 2 dimensional landmark
 #'@param choice Which to compare with 1st object or mean obj
-#'@param Nlandmark How many landmarks are there for each object? (usually nrow(myData[,,1]))
-#'@param tune Tuning value of MCMC sampler
 #'@param Nsample Number of MCMC sample desired
+#'@param initial The start value of 5*1 parameter vector for MCMC run
+#'
 #' @keywords MCMCpostsample2D
 #' @return matrix containing samples from posterior density of parameter
 #' @export
@@ -21,119 +23,15 @@
 #'require(shapes)
 #'data(apes)
 #'myData = apes$x
-#'ape_ress_10000=MCMCpostsample2D(apes$x,10,nrow(myData[,,1]), tune=rep(1,5),10000)
+#'ape10000=MCMCpostsample2D(rnorm(5,1,1),
+#'rep(1,5),apes$x,10,10000)
+#'head(ape10000)
 #'}
 #'
 
-MCMCpostsample2D=function(myData, choice, Nlandmark, tune,Nsample)
+MCMCpostsample2D=function(initial,tune,myData, choice, Nsample)
 {
-  p=Nlandmark;
-  M = myData[,,1]
-  W=myData[,,choice]
-  Z=M; Y=W;
-  th=1;c=1:2;b=1;sig=0.1;dimm=d=2
-
-
-  fratio <- function(t1, t2)
-  {
-    c=c(t1[1],t1[2]);
-    b=t1[3];
-    th=t1[4];
-    sig=t1[5];
-
-    cc=c(t2[1],t2[2]);
-    bb=t2[3];
-    tth=t2[4];
-    ssig=t2[5];
-
-    #Building mu_1, mu_2
-
-    mu1=mu2=W;
-    for(i in 1:p)
-    {mu1[i,1]=c[1]+ (b*(cos(th)*Z[i,1]))+(b*(sin(th)*Z[i,2]))
-    mu1[i,2]=c[2]+ (b*(-sin(th)*Z[i,1]))+(b*(cos(th)*Z[i,2]))
-    }
-
-    for(i in 1:p)
-    {mu2[i,1]=cc[1]+ (bb*(cos(tth)*Z[i,1]))+(bb*(sin(tth)*Z[i,2]))
-    mu2[i,2]=cc[2]+ (bb*(-sin(tth)*Z[i,1]))+(bb*(cos(tth)*Z[i,2]))
-    }
-
-
-    sum1=0
-    for(i in 1:p)
-    { sum1= sum1+ mvtnorm::dmvnorm(W[i,], mean=mu1[i,], sigma=(sig^2)*diag(2),log=T)
-    }
-    f11=sum1;
-
-    sum2=0
-    for(i in 1:p)
-    { sum2= sum2+ dmvnorm(W[i,], mean=mu2[i,], sigma=(ssig^2)*diag(2),log=T)
-    }
-    f22=sum2;
-
-
-    #print(f22)
-    return(exp(f11-f22))
-  }
-
-
-
-
-
-  step = function(t,tune)
-  {
-
-    ## Pick new point
-    t_p = purturb2D(t, tune)
-
-    ## Acceptance probability:
-    alpha <- min(1, fratio(t_p,t))
-    ## Accept new point with probability alpha:
-    if (runif(1) < alpha)
-      t <- t_p
-    ## Returning the point:
-    return(t)
-  }
-
-  #step(rep(1,5),q)
-
-  #q2 <- function(x) rnorm(1, x, 0.08)
-
-  run <- function(t, tune, nsteps) {
-    res <- matrix(NA, nsteps, length(t))
-    for (i in seq_len(nsteps)){
-      res[i,] <- t <- step(t,tune)
-
-      print(i)
-      if (i == nsteps) cat(': Done')
-      # else cat('\014')
-    }
-    drop(res)
-  }
-
-
-  #run
-  ress <- run(rnorm(5, mean=1, sd=1),tune, Nsample)
-
-
-  naming=function()
-  {
-    TT=matrix(rep(1,5),1,5)
-    colnames(TT)<-c("c1","c2", "b", "theta", "Sigma");
-    # names <- colnames(TT)
-  }
-  plot_mcmc=function()
-  {
-    naming();
-    for(i in 1:5)
-    {
-      plot(ress[1001:10000,i], type="s", xpd=NA, ylab=paste(colnames(TT)[i]), xlab="Sample", las=1,main=expression(paste(bold("(MCMC plot from Posterior of  parameters"))))
-    }
-  }
-  plot_mcmc();
-
+  ress <- run2D(initial,tune, myData, choice, Nsample)
   return(ress);
-
 }
 

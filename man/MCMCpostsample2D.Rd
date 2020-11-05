@@ -5,16 +5,16 @@
 \title{MCMC posterior sampling for 2D landmark data
 (Gaussian likelihood with Isotropic Error Variance)}
 \usage{
-MCMCpostsample2D(myData, choice, Nlandmark, tune, Nsample)
+MCMCpostsample2D(initial, tune, myData, choice, Nsample)
 }
 \arguments{
+\item{initial}{The start value of 5*1 parameter vector for MCMC run}
+
+\item{tune}{Tuning value of MCMC sampler}
+
 \item{myData}{3D array containing 2 dimensional landmark}
 
 \item{choice}{Which to compare with 1st object or mean obj}
-
-\item{Nlandmark}{How many landmarks are there for each object? (usually nrow(myData\link{,,1}))}
-
-\item{tune}{Tuning value of MCMC sampler}
 
 \item{Nsample}{Number of MCMC sample desired}
 }
@@ -36,7 +36,9 @@ Note that, here we are assuming Isotropy of error variance
 require(shapes)
 data(apes)
 myData = apes$x
-ape_ress_10000=MCMCpostsample2D(apes$x,10,nrow(myData[,,1]), tune=rep(1,5),10000)
+ape10000=MCMCpostsample2D(rnorm(5,1,1),
+rep(1,5),apes$x,10,10000)
+head(ape10000)
 }
 
 }

@@ -36,6 +36,7 @@ TMCMCpostsample2D=function(myData, choice, Nlandmark, tune,Nsample)
 
   fratio <- function(t1, t2)
   {
+
     c=c(t1[1],t1[2]);
     b=t1[3];
     th=t1[4];
