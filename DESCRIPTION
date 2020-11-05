@@ -1,0 +1,26 @@
+Package: BPviGM1
+Type: Package
+Title: Novel Bayesian Procrustes Variance-based Inferences  in Geometric Morphometrics
+Version: 0.1.0
+Authors@R: 
+    person(given = "Debashis",
+           family = "Chatterjee",
+           role  = c("aut", "cre"),
+           email = "cdebashis.r@gmail.com",
+           comment = c(ORCID = "https://orcid.org/0000-0002-0991-7574"))
+Maintainer: Debashis Chatterjee <cdebashis.r@gmail.com>
+Description: Novel Bayesian   Procrustes Variance-based Inferences  in Geometric Morphometrics (under isotropic variance assumption).
+License: `use_mit_license()`, `use_gpl3_license()` 
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1.9000
+Imports:
+	available,
+	MASS,
+	coda,
+	rjags, 
+	rgl,shapes,
+	Morpho, geomorph, mvtnorm
+Depends: 
+    R (>= 2.10)
