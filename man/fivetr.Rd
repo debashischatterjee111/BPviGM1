@@ -3,7 +3,7 @@
 \docType{data}
 \name{fivetr}
 \alias{fivetr}
-\title{Triangles in 2D (raw)}
+\title{5 Triangles in 2D (raw)}
 \format{
 An object of class \code{array} of dimension 3 x 2 x 5.
 }
