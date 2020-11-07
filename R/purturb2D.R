@@ -20,7 +20,7 @@
 #'abline(h=mean(tempp))
 #'for(k in 1:NN)
 #'{   Sys.sleep(.1)
-#' temp[k]=mean(purturb(tempp, rep(11,5)))
+#' temp[k]=mean(purturb2D(tempp, rep(11,5)))
 #'  points( temp[k]~k,pch = 10,col =k)
 #' Sys.sleep(0)
 #'}
