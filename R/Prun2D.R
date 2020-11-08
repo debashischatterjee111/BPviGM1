@@ -28,14 +28,34 @@
 
 Prun2D <- function(t, tune, myData, Nsample)
 {
-  nsteps=Nsample
-   res <- matrix(NA, nsteps, length(t))
+  nsteps=Nsample;
+  if(nsteps<100)
+  {stop("Error! Nsample should be greater than 100");}
+  pb <- txtProgressBar(min = 0, max = nsteps, style = 3, char="=~>", width=10)
+   res <- matrix(NA, nsteps, length(t));
+   ptm <- proc.time();
   for (i in seq_len(nsteps)){
     res[i,] <- t <- Pstep2D(t,tune,myData)
 
-    print(i)
-    if (i == nsteps) cat(': Done')
+   # print(i)
+    # if (i == nsteps) cat(': Done')
     # else cat('\014')
+    #setTxtProgressBar(pb, i)
+    setTxtProgressBar(pb, i);
+    if(i==1|i==round(nsteps/nsteps)|i==round(nsteps/20)|i==round(nsteps/10)|i==round(nsteps/9)|i==round(nsteps/8)|i==round(nsteps/7)|i==round(nsteps/6)|i==round(nsteps/5)|i==round(nsteps/4)|i==round(nsteps/3)|i==round(nsteps/2)|i==round(nsteps/1.5)|i==round(nsteps/1.2)|i==round(nsteps/1))
+      #{print(i)}
+      # progress(i,progress.bar = T)
+
+    {     cat(paste0('current sample:[', i,'] mcmc_run: ', round(i/ (nsteps-1) * 100), '% completed'))
+
+    }
+    if (i == nsteps)
+    { print("***");
+      cat(': Done :');
+      print("***");
+    }
   }
-  drop(res)
+   print("Time taken:");
+   print(proc.time()-ptm);
+  drop(res);
 }

@@ -36,7 +36,7 @@ Ppurturb2D <- function(t, tune) {
   { new_sig = sig+0.5*tune*e
   }
   else
-  {  new_sig = min(0.001,sig-0.5*tune*e)
+  {  new_sig = max(0.001,sig-(0.5*tune*e))
   }
 
   g=c(new_sig)

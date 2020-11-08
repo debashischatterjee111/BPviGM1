@@ -32,7 +32,8 @@
 Pfratio2D <- function(t1, t2,  myData)
 {Dim=dim(myData)
   M = myData[,,1]
-  if(nrow(M)!=nrow(W))
+  W=myData[,,2]
+    if(nrow(M)!=nrow(W))
   {print("Error! Landmark Mismatch! Format the Data Properly into 3D array!")}
   p=nrow(M)
 

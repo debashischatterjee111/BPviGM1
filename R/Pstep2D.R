@@ -39,6 +39,7 @@ Pstep2D = function(t,tune,myData)
   ## Accept new point with probability alpha:
   if (runif(1) < alpha)
     t <- t_p
+
   ## Returning the point:
   return(t)
 }
