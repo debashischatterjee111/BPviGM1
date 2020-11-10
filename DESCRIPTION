@@ -19,8 +19,7 @@ Imports:
 		MASS,
 		shapes,
   	Morpho, 
-	geomorph, 
-	mvtnorm
+		mvtnorm
 Depends: 
     R (>= 2.10)
 
