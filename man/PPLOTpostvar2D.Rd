@@ -4,12 +4,14 @@
 \alias{PPLOTpostvar2D}
 \title{"PPLOTpostvar2D"  Plot of posterior of Landmark variance parameter from MCMC sampling}
 \usage{
-PPLOTpostvar2D(mcmcmat, burnin)
+PPLOTpostvar2D(mcmcmat, burnin, colu)
 }
 \arguments{
 \item{mcmcmat}{A matrix containing MCMC sample values from posterior of  sigma- parameters}
 
 \item{burnin}{Value for MCMC burn-in}
+
+\item{colu}{colour of plot}
 
 \item{Nsample}{number of MCMC samples}
 }

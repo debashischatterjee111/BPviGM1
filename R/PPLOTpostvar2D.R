@@ -8,7 +8,7 @@
 #'@param mcmcmat  A matrix containing MCMC sample values from posterior of  sigma- parameters
 #'@param burnin Value for MCMC burn-in
 #'@param Nsample number of MCMC samples
-#'
+#'@param colu  colour of plot
 #' @keywords PPLOTpostvar2D
 #' @return plot
 #' @export
@@ -28,7 +28,7 @@
 
 
 
-PPLOTpostvar2D=function(mcmcmat, burnin)
+PPLOTpostvar2D=function(mcmcmat, burnin,colu)
 {
   if(length(mcmcmat)<burnin)
   {print("Error! nrow(mcmcmat)should be > burnin")
@@ -37,8 +37,8 @@ PPLOTpostvar2D=function(mcmcmat, burnin)
   TT=matrix(rep(1,1),1,1)
   colnames(TT)<-c("Sigma");
 
-  plot(mcmcmat[(burnin+1):Nsample], type="s", xpd=NA, ylab=paste(colnames(TT)[1]), xlab="MCMC Sample", las=1,main=expression(paste(bold("(MCMC plot from Posterior of  parameters"))))
-
+  plot(mcmcmat, type="s", xpd=NA, ylab=paste(colnames(TT)[1]), xlab="MCMC Sample", las=1,main=expression(paste(bold("(MCMC plot from Posterior of  parameters"))),col=colu)
+  abline(v=burnin, col="black",lwd=2, lty=2)
 }
 
 
